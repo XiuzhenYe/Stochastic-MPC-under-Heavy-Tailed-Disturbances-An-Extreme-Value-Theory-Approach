@@ -224,13 +224,14 @@ if __name__ == "__main__":
     ax.plot(Y_illus, lw=0.7, color="steelblue")
     ax.axhline(u0, color="crimson", ls="--", lw=1.2)
     ax.scatter(np.where(exceed)[0], Y_illus[exceed], color="crimson", s=18, zorder=5)
-    ax.set_title(f"unicycle-derived $A_K$: {exceed.sum()} exceedances, 2 cluster(s)",
+    ax.set_title(f"unicycle-derived $A_K$: {exceed.sum()} exceedances, {n_clusters} cluster(s)",
                  fontsize=9.5)
     ax.set_xlabel("time step $k$")
     ax.set_ylabel("$Y_k$")
 
     fig.tight_layout()
     out_dir = os.path.dirname(os.path.abspath(__file__))
-    fig.savefig(os.path.join(out_dir, "theta_unicycle_validation.png"), dpi=200) 
+    fig.savefig(os.path.join(out_dir, "theta_unicycle_validation.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, "theta_unicycle_validation.pdf"))
     print(f"\nSaved theta_unicycle_validation.png/.pdf to {out_dir}")
     print(f"Total time: {time.time()-t0:.1f}s")

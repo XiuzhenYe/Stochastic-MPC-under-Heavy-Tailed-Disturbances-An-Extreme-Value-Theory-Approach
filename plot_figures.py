@@ -2,8 +2,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-DATA_PATH = os.path.join("data", "comparison_data.npz")
-FIG_DIR = "figures"
+DATA_PATH = "comparison_data.npz"
+FIG_DIR = "."
 
 COLORS = {
     "baseline": "tab:red",
