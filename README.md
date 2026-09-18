@@ -64,17 +64,6 @@ python main_compare_controllers.py   # overwrites comparison_data.npz
 python plot_figures.py
 ```
 
-Prints "OVERNIGHT settings ... this will take a long time" and checkpoints
-progress to `checkpoint.npz` every 10 trials. Random seeds are fixed
-throughout, so a full rerun reproduces the included results up to
-solver/platform floating-point differences.
-
-`main_linearize_smpc.py` is the linearize-and-resolve (SCP) tube-SMPC
-solver used inside the comparison; `main_Monte_Carlo.py` is a standalone
-Monte Carlo safety-evaluation utility. `Helper_*.py` cover system setup and
-disturbance sampling, the DLQR gain, dynamics/obstacle linearization,
-nominal rollout, GPD/EVT quantile estimation, extremal-index estimation,
-the tightened-QP solve, and shared type/dataclass definitions.
 
 ## Citation
 
