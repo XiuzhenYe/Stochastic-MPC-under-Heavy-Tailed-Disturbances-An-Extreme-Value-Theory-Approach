@@ -127,5 +127,5 @@ If you use this code, please cite:
 
 ```
 X. Ye and W. Tang, "Stochastic MPC under Heavy-Tailed Disturbances: An
-Extreme Value Theory Approach," [venue/year].
+Extreme Value Theory Approach," 
 ```
