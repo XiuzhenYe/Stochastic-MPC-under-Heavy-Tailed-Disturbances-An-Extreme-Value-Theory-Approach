@@ -119,19 +119,7 @@ safety-margin distribution across all four controllers.
 
 <img src="fig2_theta_correction.png" width="600" alt="Empirical violation probability for naive-EVT vs theta-corrected-EVT, and safety-margin distribution across all four controllers">
 
-## Which script to run
-
-All scripts live at the repo root and are run directly with `python
-<script>.py` — no `cd` or subfolder needed.
-
-| Figure | Run this |
-|---|---|
-| Figure 1 | `python extremal_index_illustration.py` |
-| Figure 1, cross-check (console output only, no figure) | `python estimate_theta_Y.py` |
-| Figures 2 and 4 (reads `comparison_data.npz`, renders both) | `python plot_figures.py` |
-| Figure 3 | `python validate_theta_unicycle.py` |
-| Figure 3, risk demo (`theta_corrected_tightening_demo.png`) | `python demo_theta_corrected_tightening.py` |
-
+ 
  
 ## Citation
 
