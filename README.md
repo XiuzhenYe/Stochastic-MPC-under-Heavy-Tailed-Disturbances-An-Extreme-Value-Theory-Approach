@@ -34,6 +34,73 @@ pip install -r requirements.txt
 cover everything below; the MPC solve (Figures 2 and 4) is the only part
 that needs `scipy`/`cvxpy`.
 
+
+# Robot Safety under Extreme Rare Catastrophic Events
+
+The full nonlinear tube-SMPC controller (see
+[smpc-evt-tube](https://github.com/XiuzhenYeee/Stochastic-Model-Predictive-Control-Algorithm-Design-under-Extreme-Rare-Events)
+for how it works) run head-to-head under four tightening strategies, to
+measure what the θ-correction actually buys you on the real closed-loop
+system — not just on a frozen-gain approximation.
+
+## The four controllers
+
+| Controller | Tightening |
+|---|---|
+| `baseline` (go-to-goal) | none |
+| `gaussian` | assumes Gaussian tube error |
+| `evt` | POT/GPD quantile, naive per-step $\epsilon$ |
+| `evt_theta` | POT/GPD quantile, θ-corrected $\epsilon_\star = -\ln(1-\epsilon)/(\theta N)$ |
+
+`evt` and `evt_theta` use the *same* GPD tail estimator and the *same*
+tube-MPC solve at every step — the only difference is the target
+probability level passed in, using this scenario's own validated θ. Any
+difference in outcome between them is therefore attributable to the
+clustering correction alone, not to a different estimator or solver.
+
+## Install
+
+```bash
+pip install -r requirements.txt
+```
+
+## Reproduce the figures above without rerunning the simulation
+
+```bash
+python plot_figures.py
+```
+
+Reads `data/comparison_data.npz` (the exact data behind the figures above —
+$M=300$ trials, fixed seeds) and renders `fig1_scenario_comparison.{png,pdf}`
+and `fig2_theta_correction.{png,pdf}` into `figures/`.
+
+## Rerun the full comparison from scratch (slow)
+
+```bash
+python main_compare_controllers.py   # overwrites data/comparison_data.npz
+python plot_figures.py
+```
+
+This reruns all $M=300$ trials for all four controllers, re-estimating θ
+for the scenario and refitting the GPD tail from fresh Monte Carlo samples
+at every MPC re-solve.
+
+## Contents
+
+- `main_compare_controllers.py` — runs the $M=300$-trial comparison above.
+- `main_linearize_smpc.py` — the linearize-and-resolve (SCP) tube-SMPC
+  solver used inside the comparison.
+- `main_Monte_Carlo.py` — standalone Monte Carlo safety-evaluation utility.
+- `plot_figures.py` — renders the two figures above from saved data.
+- `Helper_*.py` — system setup and disturbance sampling, DLQR gain,
+  dynamics/obstacle linearization, nominal rollout, GPD/EVT quantile
+  estimation (`pot_gpd_quantile`), **extremal-index estimation for this
+  scenario** (`Helper_extremal_index.py` — computes this run's θ̂ and
+  $\epsilon_\star$), the tightened-QP solve, and shared type/dataclass
+  definitions.
+
+
+
 ## Figures
 
 **Figure 1 — extremal index illustration.** A realization of the AR(1)
@@ -53,7 +120,7 @@ naive-EVT controllers on the unicycle obstacle-avoidance scenario.
 illustrative trajectory with exceedance clusters marked, using the
 closed-loop gain actually derived from the unicycle scenario.
 
-<img src="theta_unicycle_validation.png" width="600" alt="Illustrative trajectory with exceedance clusters marked, unicycle-derived closed-loop gain">
+<img src="theta_unicycle_validation.png" width="400" alt="Illustrative trajectory with exceedance clusters marked, unicycle-derived closed-loop gain">
 
 **Figure 4 — effect of the θ-correction.** Empirical violation probability
 for naive-EVT vs. θ-corrected-EVT against the target $\epsilon$, and
@@ -74,47 +141,7 @@ All scripts live at the repo root and are run directly with `python
 | Figure 3 | `python validate_theta_unicycle.py` |
 | Figure 3, risk demo (`theta_corrected_tightening_demo.png`) | `python demo_theta_corrected_tightening.py` |
 
-## `main_compare_controllers.py`
-
-This is the script that originally *generated* `comparison_data.npz` (the
-data behind Figures 2 and 4) — it's included for transparency and full
-reproducibility, but you don't need to run it to get the figures above,
-since the data file is already provided.
-
-Four controllers are compared over $M=300$ independent trials:
-
-| Controller | Tightening |
-|---|---|
-| `baseline` (go-to-goal) | none |
-| `gaussian` | assumes Gaussian tube error |
-| `evt` | POT/GPD quantile, naive per-step $\epsilon$ |
-| `evt_theta` | POT/GPD quantile, $\theta$-corrected $\epsilon_\star = -\ln(1-\epsilon)/(\theta N)$ |
-
-`evt` and `evt_theta` use the identical GPD estimator and MPC solve; the
-only difference is the target probability level, using the extremal index
-$\theta$ estimated for this scenario. Any difference between them is
-therefore attributable to the clustering correction alone.
-
-To rerun the full comparison from scratch (slow — this is the "overnight"
-run referenced in the code):
-
-```bash
-python main_compare_controllers.py   # overwrites comparison_data.npz
-python plot_figures.py
-```
-
-Prints "OVERNIGHT settings ... this will take a long time" and checkpoints
-progress to `checkpoint.npz` every 10 trials. Random seeds are fixed
-throughout, so a full rerun reproduces the included results up to
-solver/platform floating-point differences.
-
-`main_linearize_smpc.py` is the linearize-and-resolve (SCP) tube-SMPC
-solver used inside the comparison; `main_Monte_Carlo.py` is a standalone
-Monte Carlo safety-evaluation utility. `Helper_*.py` cover system setup and
-disturbance sampling, the DLQR gain, dynamics/obstacle linearization,
-nominal rollout, GPD/EVT quantile estimation, extremal-index estimation,
-the tightened-QP solve, and shared type/dataclass definitions.
-
+ 
 ## Citation
 
 If you use this code, please cite:
