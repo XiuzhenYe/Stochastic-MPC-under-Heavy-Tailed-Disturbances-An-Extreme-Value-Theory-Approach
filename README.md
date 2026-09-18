@@ -34,15 +34,6 @@ pip install -r requirements.txt
 cover everything below; the MPC solve (Figures 2 and 4) is the only part
 that needs `scipy`/`cvxpy`.
 
-
-# Robot Safety under Extreme Rare Catastrophic Events
-
-The full nonlinear tube-SMPC controller (see
-[smpc-evt-tube](https://github.com/XiuzhenYeee/Stochastic-Model-Predictive-Control-Algorithm-Design-under-Extreme-Rare-Events)
-for how it works) run head-to-head under four tightening strategies, to
-measure what the θ-correction actually buys you on the real closed-loop
-system — not just on a frozen-gain approximation.
-
 ## The four controllers
 
 | Controller | Tightening |
