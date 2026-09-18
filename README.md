@@ -36,48 +36,43 @@ that needs `scipy`/`cvxpy`.
 
 ## Figures
 
-All scripts live at the repo root and are run directly with `python
-<script>.py` — no `cd` or subfolder needed.
-
-**Figure 1** — `python extremal_index_illustration.py`. Toy AR(1) model
-$Z_k = \rho Z_{k-1} + \zeta_k$ with Pareto innovations, for which
-$\theta = 1-\rho^\alpha$ in closed form: (a) a realization with exceedances
-clustering into episodes, (b) the running-maximum probability compared to
-the i.i.d. and dependent-process theoretical curves.
+**Figure 1 — extremal index illustration.** A realization of the AR(1)
+toy model showing exceedances clustering into episodes, and the
+running-maximum probability compared to the i.i.d. and dependent-process
+theoretical curves.
 
 <img src="extremal_index_illustration.png" width="600" alt="Extremal index illustration: exceedance clustering and running-maximum probability">
 
-*(Cross-check: `python estimate_theta_Y.py` independently validates the same
-closed-form $\theta$ on a generic 2×2 rotation-scaling system against the
-data-driven Ferro–Segers estimator; prints to the console, no figure.)*
-
-**Figures 2 and 4** — `python plot_figures.py` (reads `comparison_data.npz`,
-renders both). Figure 2: representative trajectories and minimum-clearance
-histograms for the baseline / Gaussian / naive-EVT controllers on the
-unicycle obstacle-avoidance scenario. Figure 4: empirical violation
-probability for naive-EVT vs. $\theta$-corrected-EVT against the target
-$\epsilon$, plus the safety-margin distribution across all four controllers.
+**Figure 2 — scenario and naive-tightening comparison.** Representative
+trajectories and minimum-clearance histograms for the baseline / Gaussian /
+naive-EVT controllers on the unicycle obstacle-avoidance scenario.
 
 <img src="fig1_scenario_comparison.png" width="600" alt="Scenario trajectories and minimum-clearance histograms for baseline, Gaussian, and naive-EVT controllers">
 
-<img src="fig2_theta_correction.png" width="600" alt="Empirical violation probability for naive-EVT vs theta-corrected-EVT, and safety-margin distribution across all four controllers">
-
-**Figure 3** — `python validate_theta_unicycle.py`. Validates the
-closed-form extremal index $\theta_Y$ (Proposition 1) against the
-Ferro–Segers estimator, using the closed-loop gain $A_K$ actually derived
-from the unicycle scenario above (frozen at the representative operating
-point), rather than the generic system used for Figure 1's cross-check.
-Prints the comparison to the console; the figure shows a single
-illustrative trajectory with exceedance clusters marked. Takes roughly
-1–2 minutes (several long simulated trajectories for the cross-check).
+**Figure 3 — extremal index validation on the unicycle scenario.** An
+illustrative trajectory with exceedance clusters marked, using the
+closed-loop gain actually derived from the unicycle scenario.
 
 <img src="theta_unicycle_validation.png" width="600" alt="Illustrative trajectory with exceedance clusters marked, unicycle-derived closed-loop gain">
 
-*(Risk demo: `python demo_theta_corrected_tightening.py` quantifies the
-$\theta$-correction's effect on trajectory-level risk at this scenario's
-own parameters — naive-vs-corrected episode-level violation probability
-and expected consecutive-violation run length — saving
-`theta_corrected_tightening_demo.png`.)*
+**Figure 4 — effect of the θ-correction.** Empirical violation probability
+for naive-EVT vs. θ-corrected-EVT against the target $\epsilon$, and
+safety-margin distribution across all four controllers.
+
+<img src="fig2_theta_correction.png" width="600" alt="Empirical violation probability for naive-EVT vs theta-corrected-EVT, and safety-margin distribution across all four controllers">
+
+## Which script to run
+
+All scripts live at the repo root and are run directly with `python
+<script>.py` — no `cd` or subfolder needed.
+
+| Figure | Run this |
+|---|---|
+| Figure 1 | `python extremal_index_illustration.py` |
+| Figure 1, cross-check (console output only, no figure) | `python estimate_theta_Y.py` |
+| Figures 2 and 4 (reads `comparison_data.npz`, renders both) | `python plot_figures.py` |
+| Figure 3 | `python validate_theta_unicycle.py` |
+| Figure 3, risk demo (`theta_corrected_tightening_demo.png`) | `python demo_theta_corrected_tightening.py` |
 
 ## `main_compare_controllers.py`
 
